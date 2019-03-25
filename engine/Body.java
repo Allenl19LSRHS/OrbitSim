@@ -1,5 +1,6 @@
 package orbitsim.engine;
 
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 public class Body {
@@ -15,7 +16,7 @@ public class Body {
 		mass = m;
 		posX = x;
 		posY = y;
-		circle = new Circle(posX, posY, mass);
+		circle = new Circle(posX, posY, mass, Color.WHITESMOKE);
 	}
 	
 	
