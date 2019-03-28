@@ -2,27 +2,35 @@ package orbitsim.display;
 
 import java.util.ArrayList;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import orbitsim.engine.Body;
 
 
 //Questions to answer:
-// How to do the movement? Update position and just redraw (which means manually creating a framerate?)
 // 		or figure out how to use JavaFX animation?
 // Add buttons and text fields to change stats around bodies
 // Eventually, display velocity vectors, maybe force vectors, and history path for objects
 
+
+// Movement will be with a new KeyFrame and new Timeline for every single movement?
 public class OrbitSim extends Application {
 	ArrayList<Body> bodies = new ArrayList<Body>();
+	Timeline timeline = new Timeline();
 
 	public static void main(String[] args) {
 		launch(args);
@@ -52,15 +60,37 @@ public class OrbitSim extends Application {
 		for (int i = 0; i < bodies.size(); i++) {
 			canvas.getChildren().add(bodies.get(i).getCircle());
 		}
-		//mainPane.getChildren().add(new Circle(250, 250, 50, Color.BLACK));
 		
 		canvas.setEffect(new BoxBlur(1, 1, 1));
 		stage.setScene(new Scene(root, 1200, 800));
-		stage.show();
 		
-		// How to update the positions of the circles
-		bodies.get(0).getCircle().setCenterX(250);
-		bodies.get(0).getCircle().setCenterY(700);
+		
+		// Create keyframes, then play it, and onFinished of last KeyFrame is function to clear KeyFrames, 
+		// Stop timeline, and prompts recreation of next KeyFrame set
+		timeline.getKeyFrames().addAll(
+				new KeyFrame(Duration.ZERO, new KeyValue(bodies.get(0).getCircle().translateXProperty(), bodies.get(0).getCircle().getCenterX()), new KeyValue(bodies.get(0).getCircle().translateYProperty(), bodies.get(0).getCircle().getCenterY())),
+				new KeyFrame(new Duration(2000), new clearTimeline(), new KeyValue(bodies.get(0).getCircle().translateXProperty(), 250), new KeyValue(bodies.get(0).getCircle().translateYProperty(), 250))
+			);
+		
+		timeline.play();
+		
+		stage.show();
 	}
 
+	class clearTimeline implements EventHandler<ActionEvent> {
+
+		public void handle(ActionEvent event) {
+			timeline.getKeyFrames().clear();
+			timeline.stop();
+			
+
+			timeline.getKeyFrames().addAll(
+					new KeyFrame(Duration.ZERO, new KeyValue(bodies.get(0).getCircle().translateXProperty(), bodies.get(0).getCircle().getCenterX()), new KeyValue(bodies.get(0).getCircle().translateYProperty(), bodies.get(0).getCircle().getCenterY())),
+					new KeyFrame(new Duration(5000), new KeyValue(bodies.get(0).getCircle().translateXProperty(), 400), new KeyValue(bodies.get(0).getCircle().translateYProperty(), 500))
+				);
+			
+			timeline.play();
+		}
+		
+	}
 }
