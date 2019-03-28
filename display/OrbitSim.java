@@ -22,12 +22,15 @@ import orbitsim.engine.Body;
 
 
 //Questions to answer:
-// 		or figure out how to use JavaFX animation?
+// Slider for timescale? Faster = less accurate, slower = more accurate
 // Add buttons and text fields to change stats around bodies
 // Eventually, display velocity vectors, maybe force vectors, and history path for objects
 
 
-// Movement will be with a new KeyFrame and new Timeline for every single movement?
+// Movement will be with a new KeyFrame for every single movement, with duration set based on timescale slider
+// Each "tick" (every time the current animation is done) each body calculates where it should be next "tick"
+// all of those positions are sent to the timeline via KeyFrames, and then the timeline is run until animation is completed
+// Basically, GUI runs as fast as JavaFX does (because animations) but calculations are done depending on length of timeline
 public class OrbitSim extends Application {
 	ArrayList<Body> bodies = new ArrayList<Body>();
 	Timeline timeline = new Timeline();
