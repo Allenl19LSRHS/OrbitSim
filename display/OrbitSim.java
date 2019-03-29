@@ -7,12 +7,12 @@ import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.effect.BoxBlur;
+import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
@@ -55,6 +55,10 @@ public class OrbitSim extends Application {
 		Group canvas = new Group();
 		root.getChildren().add(canvas);
 		
+		BodyControlManager bodyControlManager = new BodyControlManager(root);
+		
+		bodyControlManager.recreateGrid(2);
+		
 		// New bodies are added to the ArrayList
 		bodies.add(new Body(10, 20, 20));
 		bodies.add(new Body(20, 100, 100));
@@ -83,9 +87,9 @@ public class OrbitSim extends Application {
 	class clearTimeline implements EventHandler<ActionEvent> {
 
 		public void handle(ActionEvent event) {
-			timeline.getKeyFrames().clear();
 			timeline.stop();
-			
+			timeline.getKeyFrames().clear();
+
 
 			timeline.getKeyFrames().addAll(
 					new KeyFrame(Duration.ZERO, new KeyValue(bodies.get(0).getCircle().translateXProperty(), bodies.get(0).getCircle().getCenterX()), new KeyValue(bodies.get(0).getCircle().translateYProperty(), bodies.get(0).getCircle().getCenterY())),
