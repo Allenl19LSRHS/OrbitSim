@@ -7,12 +7,10 @@ import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.effect.BoxBlur;
-import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
@@ -33,7 +31,8 @@ import orbitsim.engine.Body;
 // Basically, GUI runs as fast as JavaFX does (because animations) but calculations are done depending on length of timeline
 public class OrbitSim extends Application {
 	ArrayList<Body> bodies = new ArrayList<Body>();
-	Timeline timeline = new Timeline();
+	TimelineManager timelineManager = new TimelineManager(bodies);
+	Timeline timeline = timelineManager.getTimeline();
 
 	public static void main(String[] args) {
 		launch(args);
@@ -55,13 +54,13 @@ public class OrbitSim extends Application {
 		Group canvas = new Group();
 		root.getChildren().add(canvas);
 		
-		BodyControlManager bodyControlManager = new BodyControlManager(root);
+		//BodyControlManager bodyControlManager = new BodyControlManager(root);
 		
-		bodyControlManager.recreateGrid(2);
+		//bodyControlManager.recreateGrid(2);
 		
 		// New bodies are added to the ArrayList
-		bodies.add(new Body(10, 20, 20));
-		bodies.add(new Body(20, 100, 100));
+		bodies.add(new Body(10, 20, 20, timeline, timelineManager));
+		//bodies.add(new Body(20, 100, 100));
 		
 		// Display engine displays them at the beginning. Will probably want it to add the body's circle to the canvas any time one is created.
 		for (int i = 0; i < bodies.size(); i++) {
@@ -74,30 +73,15 @@ public class OrbitSim extends Application {
 		
 		// Create keyframes, then play it, and onFinished of last KeyFrame is function to clear KeyFrames, 
 		// Stop timeline, and prompts recreation of next KeyFrame set
-		timeline.getKeyFrames().addAll(
-				new KeyFrame(Duration.ZERO, new KeyValue(bodies.get(0).getCircle().translateXProperty(), bodies.get(0).getCircle().getCenterX()), new KeyValue(bodies.get(0).getCircle().translateYProperty(), bodies.get(0).getCircle().getCenterY())),
-				new KeyFrame(new Duration(2000), new clearTimeline(), new KeyValue(bodies.get(0).getCircle().translateXProperty(), 250), new KeyValue(bodies.get(0).getCircle().translateYProperty(), 250))
+		/*timeline.getKeyFrames().addAll(
+				new KeyFrame(Duration.ZERO, new KeyValue(bodies.get(0).getCircle().translateXProperty(), bodies.get(0).getX()), new KeyValue(bodies.get(0).getCircle().translateYProperty(), bodies.get(0).getY())),
+				new KeyFrame(new Duration(2000), timelineManager, new KeyValue(bodies.get(0).getCircle().translateXProperty(), 50), new KeyValue(bodies.get(0).getCircle().translateYProperty(), 50))
 			);
+			*/
+		timelineManager.handle(new ActionEvent());
 		
 		timeline.play();
 		
 		stage.show();
-	}
-
-	class clearTimeline implements EventHandler<ActionEvent> {
-
-		public void handle(ActionEvent event) {
-			timeline.stop();
-			timeline.getKeyFrames().clear();
-
-
-			timeline.getKeyFrames().addAll(
-					new KeyFrame(Duration.ZERO, new KeyValue(bodies.get(0).getCircle().translateXProperty(), bodies.get(0).getCircle().getCenterX()), new KeyValue(bodies.get(0).getCircle().translateYProperty(), bodies.get(0).getCircle().getCenterY())),
-					new KeyFrame(new Duration(5000), new KeyValue(bodies.get(0).getCircle().translateXProperty(), 400), new KeyValue(bodies.get(0).getCircle().translateYProperty(), 500))
-				);
-			
-			timeline.play();
-		}
-		
 	}
 }
