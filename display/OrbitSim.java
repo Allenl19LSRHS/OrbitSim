@@ -1,9 +1,6 @@
 package orbitsim.display;
 
 import java.util.ArrayList;
-
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -15,7 +12,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import orbitsim.engine.Body;
 
 
@@ -33,6 +29,7 @@ public class OrbitSim extends Application {
 	ArrayList<Body> bodies = new ArrayList<Body>();
 	TimelineManager timelineManager = new TimelineManager(bodies);
 	Timeline timeline = timelineManager.getTimeline();
+	public static int timeScale = 100;
 
 	public static void main(String[] args) {
 		launch(args);
@@ -53,13 +50,14 @@ public class OrbitSim extends Application {
 		
 		Group canvas = new Group();
 		root.getChildren().add(canvas);
+		timelineManager.sendCanvas(canvas);
 		
 		//BodyControlManager bodyControlManager = new BodyControlManager(root);
 		
 		//bodyControlManager.recreateGrid(2);
 		
 		// New bodies are added to the ArrayList
-		bodies.add(new Body(10, 20, 20, timeline, timelineManager));
+		bodies.add(new Body(10, 20, 20, canvas, timelineManager));
 		//bodies.add(new Body(20, 100, 100));
 		
 		// Display engine displays them at the beginning. Will probably want it to add the body's circle to the canvas any time one is created.
