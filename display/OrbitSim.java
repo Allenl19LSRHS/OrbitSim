@@ -61,7 +61,7 @@ public class OrbitSim extends Application {
 			canvas.getChildren().add(bodies.get(i).getCircle());
 		}
 		
-		canvas.setEffect(new BoxBlur(1, 1, 1));
+		//canvas.setEffect(new BoxBlur(1, 1, 1));
 		stage.setScene(new Scene(root, 1200, 800));
 		
 		timelineManager.handle(new ActionEvent());

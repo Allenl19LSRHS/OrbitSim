@@ -27,8 +27,6 @@ public class Body {
 		mass = m;
 		posX = x;
 		posY = y;
-		posXOld = x;
-		posYOld = y;
 		circle = new Circle(posX, posY, mass, Color.WHITESMOKE);
 		timelineManager = tlmgr;
 	}
