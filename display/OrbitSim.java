@@ -9,6 +9,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -27,9 +28,10 @@ import orbitsim.engine.Body;
 // Basically, GUI runs as fast as JavaFX does (because animations) but calculations are done depending on length of timeline
 public class OrbitSim extends Application {
 	ArrayList<Body> bodies = new ArrayList<Body>();
-	TimelineManager timelineManager = new TimelineManager(bodies);
+	TimelineManager timelineManager = new TimelineManager(bodies, this);
 	Timeline timeline = timelineManager.getTimeline();
-	public static int timeScale = 100;
+	public static int timeScale = 30;
+	Group canvas = new Group();
 
 	public static void main(String[] args) {
 		launch(args);
@@ -48,7 +50,6 @@ public class OrbitSim extends Application {
 		Group root = new Group();
 		root.getChildren().add(new Rectangle(bounds.getWidth(), bounds.getHeight(), Color.BLACK));
 		
-		Group canvas = new Group();
 		root.getChildren().add(canvas);
 		timelineManager.sendCanvas(canvas);
 		
@@ -57,7 +58,7 @@ public class OrbitSim extends Application {
 		//bodyControlManager.recreateGrid(2);
 		
 		// New bodies are added to the ArrayList
-		bodies.add(new Body(10, 20, 20, canvas, timelineManager));
+		bodies.add(new Body(10, 20, 20, timelineManager));
 		//bodies.add(new Body(20, 100, 100));
 		
 		// Display engine displays them at the beginning. Will probably want it to add the body's circle to the canvas any time one is created.
@@ -81,5 +82,20 @@ public class OrbitSim extends Application {
 		timeline.play();
 		
 		stage.show();
+	}
+	
+	void cycle() {
+		for (Body i : bodies) {
+			Line l = new Line(i.getOldX(), i.getOldY(), i.getCircle().getCenterX(), i.getCircle().getCenterY());
+			l.setStroke(Color.WHITE);
+			canvas.getChildren().add(l);
+			i.addToTimeline();
+		}
+		
+		timeline.play();
+	}
+	
+	Timeline getTimeline() {
+		return timeline;
 	}
 }

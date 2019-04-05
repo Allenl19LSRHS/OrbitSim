@@ -6,17 +6,17 @@ import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
 import orbitsim.engine.Body;
 
 public class TimelineManager implements EventHandler<ActionEvent> {
 	
 	ArrayList<Body> bodies;
 	Group canvas;
+	OrbitSim main;
 	
-	public TimelineManager(ArrayList<Body> bodyList) {
+	public TimelineManager(ArrayList<Body> bodyList, OrbitSim sim) {
 		bodies = bodyList;
+		main = sim;
 	}
 	
 	Timeline timeline = new Timeline();
@@ -32,12 +32,6 @@ public class TimelineManager implements EventHandler<ActionEvent> {
 	public void handle(ActionEvent event) {
 		timeline.stop();
 		timeline.getKeyFrames().clear();
-		
-
-		for (Body i : bodies) {
-			i.addToTimeline();
-		}
-		
-		timeline.play();
+		main.cycle();
 	}
 }
