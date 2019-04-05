@@ -2,7 +2,6 @@ package orbitsim.engine;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
@@ -18,8 +17,8 @@ public class Body {
 	int velX;
 	int velY;
 	Circle circle;
-	Timeline timeline;
 	TimelineManager timelineManager;
+	boolean cycled = false;
 	
 	int cycle = 0;
 	
@@ -32,17 +31,23 @@ public class Body {
 		posYOld = y;
 		circle = new Circle(posX, posY, mass, Color.WHITESMOKE);
 		timelineManager = tlmgr;
-		timeline = timelineManager.getTimeline();
 	}
-	
 	
 	public void addToTimeline() {
 		posXOld = posX;
 		posYOld = posY;
 		posX += 25-cycle;
 		posY += 5;
-		cycle++;
-		timeline.getKeyFrames().addAll(
+		if (cycle <= 25 && cycled == false) {
+			cycle++; 
+		} else {
+			cycled = true;
+			cycle--;
+			if (cycle < 1) {
+				cycled = false;
+			}
+		}
+		timelineManager.getTimeline().getKeyFrames().addAll(
 				new KeyFrame(Duration.ZERO, new KeyValue(getCircle().centerXProperty(), posX), new KeyValue(getCircle().centerYProperty(), posY)),
 				new KeyFrame(Duration.millis(OrbitSim.timeScale), timelineManager, new KeyValue(getCircle().centerXProperty(), posX + 25 - cycle), new KeyValue(getCircle().centerYProperty(), posY + 5))
 			);

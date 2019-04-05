@@ -1,7 +1,6 @@
 package orbitsim.display;
 
 import java.util.ArrayList;
-import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.geometry.Rectangle2D;
@@ -28,9 +27,8 @@ import orbitsim.engine.Body;
 // Basically, GUI runs as fast as JavaFX does (because animations) but calculations are done depending on length of timeline
 public class OrbitSim extends Application {
 	ArrayList<Body> bodies = new ArrayList<Body>();
-	TimelineManager timelineManager = new TimelineManager(bodies, this);
-	Timeline timeline = timelineManager.getTimeline();
-	public static int timeScale = 30;
+	TimelineManager timelineManager = new TimelineManager(this);
+	public static int timeScale = 60;
 	Group canvas = new Group();
 
 	public static void main(String[] args) {
@@ -51,17 +49,14 @@ public class OrbitSim extends Application {
 		root.getChildren().add(new Rectangle(bounds.getWidth(), bounds.getHeight(), Color.BLACK));
 		
 		root.getChildren().add(canvas);
-		timelineManager.sendCanvas(canvas);
 		
 		//BodyControlManager bodyControlManager = new BodyControlManager(root);
 		
 		//bodyControlManager.recreateGrid(2);
 		
-		// New bodies are added to the ArrayList
 		bodies.add(new Body(10, 20, 20, timelineManager));
-		//bodies.add(new Body(20, 100, 100));
+		bodies.add(new Body(20, 100, 100, timelineManager));
 		
-		// Display engine displays them at the beginning. Will probably want it to add the body's circle to the canvas any time one is created.
 		for (int i = 0; i < bodies.size(); i++) {
 			canvas.getChildren().add(bodies.get(i).getCircle());
 		}
@@ -69,33 +64,21 @@ public class OrbitSim extends Application {
 		canvas.setEffect(new BoxBlur(1, 1, 1));
 		stage.setScene(new Scene(root, 1200, 800));
 		
-		
-		// Create keyframes, then play it, and onFinished of last KeyFrame is function to clear KeyFrames, 
-		// Stop timeline, and prompts recreation of next KeyFrame set
-		/*timeline.getKeyFrames().addAll(
-				new KeyFrame(Duration.ZERO, new KeyValue(bodies.get(0).getCircle().translateXProperty(), bodies.get(0).getX()), new KeyValue(bodies.get(0).getCircle().translateYProperty(), bodies.get(0).getY())),
-				new KeyFrame(new Duration(2000), timelineManager, new KeyValue(bodies.get(0).getCircle().translateXProperty(), 50), new KeyValue(bodies.get(0).getCircle().translateYProperty(), 50))
-			);
-			*/
 		timelineManager.handle(new ActionEvent());
 		
-		timeline.play();
+		timelineManager.getTimeline().play();
 		
 		stage.show();
 	}
 	
 	void cycle() {
 		for (Body i : bodies) {
-			Line l = new Line(i.getOldX(), i.getOldY(), i.getCircle().getCenterX(), i.getCircle().getCenterY());
+			Line l = new Line(i.getOldX(), i.getOldY(), i.getX(), i.getY());
 			l.setStroke(Color.WHITE);
 			canvas.getChildren().add(l);
 			i.addToTimeline();
 		}
 		
-		timeline.play();
-	}
-	
-	Timeline getTimeline() {
-		return timeline;
+		timelineManager.getTimeline().play();
 	}
 }
