@@ -6,7 +6,6 @@ import javafx.event.ActionEvent;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.effect.BoxBlur;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
@@ -61,7 +60,6 @@ public class OrbitSim extends Application {
 			canvas.getChildren().add(bodies.get(i).getCircle());
 		}
 		
-		//canvas.setEffect(new BoxBlur(1, 1, 1));
 		stage.setScene(new Scene(root, 1200, 800));
 		
 		timelineManager.handle(new ActionEvent());
