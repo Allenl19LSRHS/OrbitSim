@@ -1,7 +1,6 @@
 package orbitsim.display;
 
 import java.util.ArrayList;
-
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.application.Application;
@@ -75,16 +74,12 @@ public class OrbitSim extends Application {
 	
 	void cycle() {
 		for (Body i : bodies) {
-			Line l = new Line(i.getOldX(), i.getOldY(), i.getX(), i.getY());
-			l.setStroke(Color.WHITE);
-			canvas.getChildren().add(l);
-			
 			i.setOldX(i.getX());
 			i.setOldY(i.getY());
 			i.setX(i.getX() + 25-i.cycle);
 			i.setY(i.getY() + 5);
 			if (i.cycle <= 25 && i.cycled == false) {
-				i.cycle++; 
+				i.cycle++;
 			} else {
 				i.cycled = true;
 				i.cycle--;
@@ -92,6 +87,9 @@ public class OrbitSim extends Application {
 					i.cycled = false;
 				}
 			}
+			Line l = new Line(i.getOldX(), i.getOldY(), i.getX(), i.getY());
+			l.setStroke(Color.WHITESMOKE);
+			canvas.getChildren().add(l);
 			timelineManager.getTimeline().getKeyFrames().addAll(
 					new KeyFrame(Duration.ZERO, new KeyValue(i.getCircle().centerXProperty(), i.getX()), new KeyValue(i.getCircle().centerYProperty(), i.getY())),
 					new KeyFrame(Duration.millis(OrbitSim.timeScale), timelineManager, new KeyValue(i.getCircle().centerXProperty(), i.getX() + 25 - i.cycle), new KeyValue(i.getCircle().centerYProperty(), i.getY() + 5))
