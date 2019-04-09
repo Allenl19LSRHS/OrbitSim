@@ -3,13 +3,15 @@ package orbitsim.display;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import orbitsim.engine.Universe;
 
 public class TimelineManager implements EventHandler<ActionEvent> {
-	OrbitSim main;
+	Universe main;
 	Timeline timeline = new Timeline();
 	
-	public TimelineManager(OrbitSim sim) {
-		main = sim;
+	public TimelineManager(Universe uvs) {
+		main = uvs;
+		main.setTLMgr(this);
 	}
 	
 	public Timeline getTimeline() {
