@@ -9,8 +9,8 @@ public class Body {
 	int posY;
 	int posYOld;
 	int posXOld;
-	int velX;
-	int velY;
+	double velX = 0;
+	double velY = 0;
 	Circle circle;
 	public boolean cycled = false;
 	
@@ -20,6 +20,8 @@ public class Body {
 	public Body(int m, int x, int y) {
 		mass = m;
 		posX = x;
+		posXOld = x;
+		posYOld = y;
 		posY = y;
 		circle = new Circle(posX, posY, mass, Color.WHITESMOKE);
 	}
@@ -56,5 +58,21 @@ public class Body {
 	public void setX(int x) {
 		posXOld = posX;
 		posX = x;
+	}
+	
+	public double getVelX() {
+		return velX;
+	}
+	
+	public double getVelY() {
+		return velY;
+	}
+	
+	public void setVelX(double v) {
+		velX = v;
+	}
+	
+	public void setVelY(double v) {
+		velY = v;
 	}
 }

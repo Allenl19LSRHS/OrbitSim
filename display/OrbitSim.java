@@ -22,7 +22,7 @@ import orbitsim.engine.Universe;
 // Each "tick" (every time the current animation is done) each body calculates where it should be next "tick"
 // all of those positions are sent to the timeline via KeyFrames, and then the timeline is run until animation is completed
 public class OrbitSim extends Application {
-	public static int timeScale = 60;
+	public static int timeScale = 100;
 	Group canvas = new Group();
 	Universe universe = new Universe(this);
 	TimelineManager timelineManager = new TimelineManager(universe);

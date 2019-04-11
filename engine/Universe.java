@@ -31,24 +31,32 @@ public class Universe {
 	
 	public void cycle() {
 		for (Body i : bodies) {
+			Line l = new Line(i.getOldX(), i.getOldY(), i.getX(), i.getY());
+			l.setStroke(Color.WHITESMOKE);
+			main.getCanvas().getChildren().add(l);
+			
 			ArrayList<Vector> vecs = new ArrayList<Vector>();
 			for (Body a:bodies) {
 				if (a != i) {
+					
+					// Calculation to calculate force vector is here
 					vecs.add(new Vector(0, 0));
 				}
 			}
 			
-			Vector finalVec = new Vector(5,0);
+			// Will be 0,0 so that it doesn't effect the rest
+			Vector finalVec = new Vector(0.25,0);
+			
+			// Basically just sum vectors
 			for (Vector b : vecs) {
 				finalVec = Vector.addVec(finalVec, b);
 			}
 			
-			i.setX(i.getX() + (int)finalVec.getX());
-			i.setY(i.getY() + (int)finalVec.getY());
+			i.setVelX(i.getVelX() + finalVec.getX());
+			i.setVelY(i.getVelY() + finalVec.getY());
 			
-			Line l = new Line(i.getOldX(), i.getOldY(), i.getX(), i.getY());
-			l.setStroke(Color.WHITESMOKE);
-			main.getCanvas().getChildren().add(l);
+			i.setX(i.getX() + (int)(i.getVelX() * (1000/OrbitSim.timeScale)));
+			i.setY(i.getY() + (int)(i.getVelY() * (1000/OrbitSim.timeScale)));
 			
 			timelineManager.getTimeline().getKeyFrames().addAll(
 					new KeyFrame(Duration.ZERO, new KeyValue(i.getCircle().centerXProperty(), i.getOldX()), new KeyValue(i.getCircle().centerYProperty(), i.getOldY())),
