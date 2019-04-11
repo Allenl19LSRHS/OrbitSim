@@ -17,12 +17,8 @@ import orbitsim.engine.Universe;
 // Add buttons and text fields to change stats around bodies
 // Eventually, display velocity vectors, maybe force vectors, and history path for objects
 
-
-// Movement will be with a new KeyFrame for every single movement, with duration set based on timescale slider
-// Each "tick" (every time the current animation is done) each body calculates where it should be next "tick"
-// all of those positions are sent to the timeline via KeyFrames, and then the timeline is run until animation is completed
 public class OrbitSim extends Application {
-	public static int timeScale = 100;
+	public static int timeScale = 60;
 	Group canvas = new Group();
 	Universe universe = new Universe(this);
 	TimelineManager timelineManager = new TimelineManager(universe);

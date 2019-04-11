@@ -4,7 +4,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 public class Body {
-	int mass;
+	double mass;
 	int posX;
 	int posY;
 	int posYOld;
@@ -17,16 +17,20 @@ public class Body {
 	public int cycle = 0;
 	
 	// Upon creation, sets the given values, and creates the circle for the given starting position
-	public Body(int m, int x, int y) {
+	public Body(double m, int x, int y) {
 		mass = m;
 		posX = x;
 		posXOld = x;
 		posYOld = y;
 		posY = y;
-		circle = new Circle(posX, posY, mass, Color.WHITESMOKE);
+		if (mass > 3) {
+			circle = new Circle(posX, posY, mass, Color.WHITESMOKE);
+		} else {
+			circle = new Circle(posX, posY, 3, Color.WHITESMOKE);
+		}
 	}
 	
-	public int getMass() {
+	public double getMass() {
 		return mass;
 	}
 	
