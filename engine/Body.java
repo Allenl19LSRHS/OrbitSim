@@ -48,19 +48,13 @@ public class Body {
 		return circle;
 	}
 	
-	public void setOldX(int x) {
-		posXOld = x;
-	}
-	
-	public void setOldY(int y) {
-		posYOld = y;
-	}
-	
 	public void setY(int y) {
+		posYOld = posY;
 		posY = y;
 	}
 	
 	public void setX(int x) {
+		posXOld = posX;
 		posX = x;
 	}
 }
