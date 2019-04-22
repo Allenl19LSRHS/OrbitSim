@@ -30,6 +30,21 @@ public class Body {
 		}
 	}
 	
+	public Body(double m, int x, int y, double vx, double vy) {
+		mass = m;
+		posX = x;
+		posXOld = x;
+		posYOld = y;
+		posY = y;
+		velX = vx;
+		velY = vy;
+		if (mass > 3) {
+			circle = new Circle(posX, posY, mass, Color.WHITESMOKE);
+		} else {
+			circle = new Circle(posX, posY, 3, Color.WHITESMOKE);
+		}
+	}
+	
 	public double getMass() {
 		return mass;
 	}

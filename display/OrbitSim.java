@@ -19,6 +19,7 @@ import orbitsim.engine.Universe;
 
 public class OrbitSim extends Application {
 	public static int timeScale = 60;
+	public static double G = 1000;
 	Group canvas = new Group();
 	Universe universe = new Universe(this);
 	TimelineManager timelineManager = new TimelineManager(universe);
@@ -41,6 +42,7 @@ public class OrbitSim extends Application {
 		Group root = new Group();
 		// Add background black box
 		root.getChildren().add(new Rectangle(bounds.getWidth(), bounds.getHeight(), Color.BLACK));
+		
 		
 		root.getChildren().add(canvas);
 		

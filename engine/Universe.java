@@ -13,12 +13,12 @@ public class Universe {
 	ArrayList<Body> bodies = new ArrayList<Body>();
 	TimelineManager timelineManager;
 	OrbitSim main;
-	static final int CONSTANT_G = 2000;
+	static final int CONSTANT_G = 1000000;
 	
 	public Universe(OrbitSim sim) {
 		main = sim;
-		bodies.add(new Body(0.1, 200, 200));
-		bodies.add(new Body(20, 100, 100));
+		bodies.add(new Body(0.01, 700, 600, 5, 0));
+		bodies.add(new Body(20, 600, 600, 0, 0));
 	}
 
 	public ArrayList<Body> getBodies() {
@@ -41,13 +41,29 @@ public class Universe {
 			for (Body a:bodies) {
 				if (a != i) {
 					
+					// G*M*M/r^2
+					double Fx = -(OrbitSim.G * i.getMass() * a.getMass()) / Math.pow((i.getX()-a.getX()),2);
+					double Fy = -(OrbitSim.G * i.getMass() * a.getMass()) / Math.pow((i.getY()-a.getY()),2);
+					if (i.getX() - a.getX() < 0) {
+						Fx *= -1;
+					}
+					if (i.getY() - a.getY() < 0) {
+						Fy *= -1;
+					}
+					if (i.getX() - a.getX() == 0) {
+						Fx = 0;
+					}
+					if (i.getY() - a.getY() == 0) {
+						Fy = 0;
+					}
+					System.out.println(Fx + " " + Fy);
 					// Calculation to calculate force vector is here
-					vecs.add(new Vector(0, 0));
+					vecs.add(new Vector(Fx, Fy));
 				}
 			}
 			
 			// Will be 0,0 so that it doesn't effect the rest
-			Vector finalVec = new Vector(0.25,0);
+			Vector finalVec = new Vector(0,0);
 			
 			// Basically just sum vectors
 			for (Vector b : vecs) {
