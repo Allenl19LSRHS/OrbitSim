@@ -38,10 +38,12 @@ public class Body {
 		posY = y;
 		velX = vx;
 		velY = vy;
-		if (mass > 3) {
-			circle = new Circle(posX, posY, mass, Color.WHITESMOKE);
-		} else {
+		if (mass < 3) {
 			circle = new Circle(posX, posY, 3, Color.WHITESMOKE);
+		} else if (mass > 20) {
+			circle = new Circle(posX, posY, 20, Color.WHITESMOKE);
+		} else {
+			circle = new Circle(posX, posY, mass, Color.WHITESMOKE);
 		}
 	}
 	

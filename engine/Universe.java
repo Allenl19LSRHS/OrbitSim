@@ -13,12 +13,12 @@ public class Universe {
 	ArrayList<Body> bodies = new ArrayList<Body>();
 	TimelineManager timelineManager;
 	OrbitSim main;
-	static final int CONSTANT_G = 1000000;
+	static final double CONSTANT_G = 100;
 	
 	public Universe(OrbitSim sim) {
 		main = sim;
-		bodies.add(new Body(0.01, 700, 600, 5, 0));
-		bodies.add(new Body(20, 600, 600, 0, 0));
+		bodies.add(new Body(1, 700, 600, 0, -0.75));
+		bodies.add(new Body(100, 600, 600, 0, 0));
 	}
 
 	public ArrayList<Body> getBodies() {
@@ -41,13 +41,16 @@ public class Universe {
 			for (Body a:bodies) {
 				if (a != i) {
 					
+					/*
+					 * Calculated by splitting into x and y, might not work?
+					 * when values are less than one apart, force in that dir is calc to be huge
 					// G*M*M/r^2
-					double Fx = -(OrbitSim.G * i.getMass() * a.getMass()) / Math.pow((i.getX()-a.getX()),2);
-					double Fy = -(OrbitSim.G * i.getMass() * a.getMass()) / Math.pow((i.getY()-a.getY()),2);
-					if (i.getX() - a.getX() < 0) {
+					double Fx = (OrbitSim.G * i.getMass() * a.getMass()) / Math.pow((i.getX()-a.getX()),2);
+					double Fy = (OrbitSim.G * i.getMass() * a.getMass()) / Math.pow((i.getY()-a.getY()),2);
+					if (i.getX() - a.getX() > 0) {
 						Fx *= -1;
 					}
-					if (i.getY() - a.getY() < 0) {
+					if (i.getY() - a.getY() > 0) {
 						Fy *= -1;
 					}
 					if (i.getX() - a.getX() == 0) {
@@ -57,8 +60,32 @@ public class Universe {
 						Fy = 0;
 					}
 					System.out.println(Fx + " " + Fy);
+					*/
+					
+					double dx = i.getX() - a.getX();
+					double dy = i.getY() - a.getY();
+					double theta = Math.atan(dy/dx);
+					double distsq = Math.pow(dx, 2) + Math.pow(dy, 2);
+					double f = (Universe.CONSTANT_G * i.getMass() * a.getMass()) / distsq;
+					double fx = f * Math.cos(theta);
+					double fy = f * Math.sin(theta);
+					
+					if (i.getX() - a.getX() > 0) {
+						fx *= -1;
+					}
+					if (i.getY() - a.getY() > 0) {
+						fy *= -1;
+					}
+					if (i.getX() - a.getX() == 0) {
+						fx = 0;
+					}
+					if (i.getY() - a.getY() == 0) {
+						fy = 0;
+					}
+					System.out.println(fx + " " + fy);
+
 					// Calculation to calculate force vector is here
-					vecs.add(new Vector(Fx, Fy));
+					vecs.add(new Vector(fx, fy));
 				}
 			}
 			
@@ -71,18 +98,18 @@ public class Universe {
 			}
 			
 			// Set the velocity by adding components of previous vel with vel from force vector
-			i.setVelX(i.getVelX() + finalVec.getX());
-			i.setVelY(i.getVelY() + finalVec.getY());
+			i.setVelX(i.getVelX() + (finalVec.getX()/i.getMass()));
+			i.setVelY(i.getVelY() + (finalVec.getY()/i.getMass()));
 			
 			// Set the x position based on the new velocity
 			// NOTE: multiplied by .5 to slow it down, maybe make this adjustable?
-			i.setX(i.getX() + (int)(0.5*i.getVelX() * (1000/OrbitSim.timeScale)));
-			i.setY(i.getY() + (int)(0.5*i.getVelY() * (1000/OrbitSim.timeScale)));
+			i.setX(i.getX() + (int)(0.5*i.getVelX() * (1000/OrbitSim.universeTick)));
+			i.setY(i.getY() + (int)(0.5*i.getVelY() * (1000/OrbitSim.universeTick)));
 			
 			// Add keyframes based on old and new positions
 			timelineManager.getTimeline().getKeyFrames().addAll(
 					new KeyFrame(Duration.ZERO, new KeyValue(i.getCircle().centerXProperty(), i.getOldX()), new KeyValue(i.getCircle().centerYProperty(), i.getOldY())),
-					new KeyFrame(Duration.millis(OrbitSim.timeScale), timelineManager, new KeyValue(i.getCircle().centerXProperty(), i.getX()), new KeyValue(i.getCircle().centerYProperty(), i.getY()))
+					new KeyFrame(Duration.millis(OrbitSim.animScale), timelineManager, new KeyValue(i.getCircle().centerXProperty(), i.getX()), new KeyValue(i.getCircle().centerYProperty(), i.getY()))
 				);
 		}
 		
