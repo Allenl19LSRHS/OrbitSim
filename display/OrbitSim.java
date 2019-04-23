@@ -19,7 +19,7 @@ import orbitsim.engine.Universe;
 
 public class OrbitSim extends Application {
 	public static int animScale = 60;
-	public static final int universeTick = 30;
+	public static final int universeTick = 10;
 	Group canvas = new Group();
 	Universe universe = new Universe(this);
 	TimelineManager timelineManager = new TimelineManager(universe);
@@ -59,6 +59,8 @@ public class OrbitSim extends Application {
 		timelineManager.handle(new ActionEvent());
 		
 		timelineManager.getTimeline().play();
+		
+		universe.cycle();
 		
 		stage.show();
 	}

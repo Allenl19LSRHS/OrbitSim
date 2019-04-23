@@ -67,17 +67,20 @@ public class Body {
 		return posYOld;
 	}
 	
+	public void resetOldPos() {
+		posYOld = posY;
+		posXOld = posX;
+	}
+	
 	public Circle getCircle() {
 		return circle;
 	}
 	
 	public void setY(int y) {
-		posYOld = posY;
 		posY = y;
 	}
 	
 	public void setX(int x) {
-		posXOld = posX;
 		posX = x;
 	}
 	

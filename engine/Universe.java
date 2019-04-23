@@ -14,11 +14,20 @@ public class Universe {
 	TimelineManager timelineManager;
 	OrbitSim main;
 	static final double CONSTANT_G = 100;
+	int cyclesSinceAnim;
+	int cyclesPerAnim;
+	
+	//TODO: Make a way for the cycle() method to be run again after the first run, not through TimelineManager
+	//		(since the timeline isn't created every cycle)
+	//TODO: remove reference to Orbitsim in constuctor? (Not necessary?)
 	
 	public Universe(OrbitSim sim) {
 		main = sim;
 		bodies.add(new Body(1, 700, 600, 0, -0.75));
 		bodies.add(new Body(100, 600, 600, 0, 0));
+		
+		cyclesPerAnim = OrbitSim.animScale/OrbitSim.universeTick;
+		cyclesSinceAnim = cyclesPerAnim;
 	}
 
 	public ArrayList<Body> getBodies() {
@@ -30,7 +39,10 @@ public class Universe {
 	}
 	
 	public void cycle() {
+		cyclesSinceAnim += 1;
+		
 		for (Body i : bodies) {
+			
 			// Draw line for previous step
 			//TODO: Maybe animate it too so it draws along with the body moving animation?
 			Line l = new Line(i.getOldX(), i.getOldY(), i.getX(), i.getY());
@@ -62,6 +74,7 @@ public class Universe {
 					System.out.println(Fx + " " + Fy);
 					*/
 					
+					// Method for calculating based on total distance then splitting it to a vector
 					double dx = i.getX() - a.getX();
 					double dy = i.getY() - a.getY();
 					double theta = Math.atan(dy/dx);
@@ -82,7 +95,7 @@ public class Universe {
 					if (i.getY() - a.getY() == 0) {
 						fy = 0;
 					}
-					System.out.println(fx + " " + fy);
+					//System.out.println(fx + " " + fy);
 
 					// Calculation to calculate force vector is here
 					vecs.add(new Vector(fx, fy));
@@ -107,12 +120,20 @@ public class Universe {
 			i.setY(i.getY() + (int)(0.5*i.getVelY() * (1000/OrbitSim.universeTick)));
 			
 			// Add keyframes based on old and new positions
-			timelineManager.getTimeline().getKeyFrames().addAll(
-					new KeyFrame(Duration.ZERO, new KeyValue(i.getCircle().centerXProperty(), i.getOldX()), new KeyValue(i.getCircle().centerYProperty(), i.getOldY())),
-					new KeyFrame(Duration.millis(OrbitSim.animScale), timelineManager, new KeyValue(i.getCircle().centerXProperty(), i.getX()), new KeyValue(i.getCircle().centerYProperty(), i.getY()))
-				);
 		}
 		
-		timelineManager.getTimeline().play();
+		if (cyclesSinceAnim == cyclesPerAnim) {
+			System.out.println("Animation created");
+			for (Body i : bodies) {
+				timelineManager.getTimeline().getKeyFrames().addAll(
+						new KeyFrame(Duration.ZERO, new KeyValue(i.getCircle().centerXProperty(), i.getOldX()), new KeyValue(i.getCircle().centerYProperty(), i.getOldY())),
+						new KeyFrame(Duration.millis(OrbitSim.animScale), timelineManager, new KeyValue(i.getCircle().centerXProperty(), i.getX()), new KeyValue(i.getCircle().centerYProperty(), i.getY()))
+					);
+				i.resetOldPos();
+			}
+				
+			cyclesSinceAnim = 0;
+			timelineManager.getTimeline().play();
+		}
 	}
 }
