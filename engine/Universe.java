@@ -22,7 +22,7 @@ public class Universe {
 	
 	public Universe(OrbitSim sim) {
 		main = sim;
-		bodies.add(new Body(1, 700, 200, 4, 3));
+		bodies.add(new Body(1, 700, 200, 4, 0));
 		bodies.add(new Body(200, 600, 400, 0, 0));
 		
 		cyclesPerAnim = OrbitSim.animScale/OrbitSim.universeTick;
@@ -54,7 +54,7 @@ public class Universe {
 						double dy = i.getY() - a.getY();
 						double theta = Math.atan2(dy, dx);
 						double distsq = Math.pow(2*dx, 2) + Math.pow(2*dy, 2);
-						double f = (Universe.CONSTANT_G * i.getMass() * a.getMass()) / distsq;
+						double f = -(Universe.CONSTANT_G * i.getMass() * a.getMass()) / distsq;
 						double fx = f * Math.cos(theta);
 						double fy = f * Math.sin(theta);
 						//System.out.println("Force: " + fx + " " + fy);
