@@ -5,12 +5,16 @@ import javafx.scene.shape.Circle;
 
 public class Body {
 	double mass;
-	int posX;
-	int posY;
-	int posYOld;
-	int posXOld;
+	double posX;
+	double posY;
+	double posYOld;
+	double posXOld;
 	double velX = 0;
 	double velY = 0;
+	double queuedVelX = 0;
+	double queuedVelY = 0;
+	double queuedX = 0;
+	double queuedY = 0;
 	Circle circle;
 	public boolean cycled = false;
 	
@@ -51,19 +55,19 @@ public class Body {
 		return mass;
 	}
 	
-	public int getX() {
+	public double getX() {
 		return posX;
 	}
 	
-	public int getY() {
+	public double getY() {
 		return posY;
 	}
 	
-	public int getOldX() {
+	public double getOldX() {
 		return posXOld;
 	}
 	
-	public int getOldY() {
+	public double getOldY() {
 		return posYOld;
 	}
 	
@@ -76,11 +80,11 @@ public class Body {
 		return circle;
 	}
 	
-	public void setY(int y) {
+	public void setY(double y) {
 		posY = y;
 	}
 	
-	public void setX(int x) {
+	public void setX(double x) {
 		posX = x;
 	}
 	
@@ -98,5 +102,22 @@ public class Body {
 	
 	public void setVelY(double v) {
 		velY = v;
+	}
+	
+	public void queuePos(double x, double y) {
+		queuedX = x;
+		queuedY = y;
+	}
+	
+	public void queueVel(double x, double y) {
+		queuedVelX = x;
+		queuedVelY = y;
+	}
+	
+	public void updateQueuedData() {
+		posX = queuedX;
+		posY = queuedY;
+		velX = queuedVelX;
+		velY = queuedVelY;
 	}
 }
