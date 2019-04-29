@@ -13,13 +13,14 @@ public class Universe {
 	ArrayList<Body> bodies = new ArrayList<Body>();
 	TimelineManager timelineManager;
 	OrbitSim main;
-	static final double CONSTANT_G = 500;
+	static final double CONSTANT_G = 5000;
 	int cyclesPerAnim;
 	
 	public Universe(OrbitSim sim) {
 		main = sim;
-		bodies.add(new Body(0.01, 700, 400, 100, 100));
-		bodies.add(new Body(100, 600, 400, 0, 0));
+		bodies.add(new Body(0.01, 700, 100, 20, 120));
+		bodies.add(new Body(200, 600, 100, 0, 0));
+		bodies.add(new Body(100, 100, 300, 10, 40));
 		
 		// Calculate how many integrations occur between each animation creation
 		cyclesPerAnim = OrbitSim.animScale/OrbitSim.universeTick;
@@ -46,7 +47,7 @@ public class Universe {
 						double dx = i.getX() - a.getX();
 						double dy = i.getY() - a.getY();
 						double theta = Math.atan2(dy, dx);
-						double distsq = Math.pow(2*dx, 2) + Math.pow(2*dy, 2);
+						double distsq = Math.pow(dx, 2) + Math.pow(dy, 2);
 						
 						// g = -Gmm/r^2
 						double f = -(Universe.CONSTANT_G * i.getMass() * a.getMass()) / distsq;
@@ -64,21 +65,58 @@ public class Universe {
 				for (Vector c : vecs) {
 					finalVec = Vector.addVec(finalVec, c);
 				}
+				
+				vecs.clear();
+
+				//Basic euler integration for the new velocity and position of the body after one physics tick
+				Vector eulerVel = new Vector(i.getVelX() + (finalVec.getX()/i.getMass())*(OrbitSim.universeTick/1000.0), i.getVelY() + (finalVec.getY()/i.getMass())*(OrbitSim.universeTick/1000.0));
+				Vector eulerPos = new Vector(i.getX() + (eulerVel.getX()*(OrbitSim.universeTick/1000.0)), i.getY() + (eulerVel.getY()*(OrbitSim.universeTick/1000.0)));
+				
+				finalVec = new Vector(0,0);
+				
+				// Now calculate velocity again at the new position
+				for (Body a:bodies) {
+					if (a != i) {
+						// Method for calculating based on total distance then splitting it to a vector
+						double dx = eulerPos.getX() - a.getX();
+						double dy = eulerPos.getY() - a.getY();
+						double theta = Math.atan2(dy, dx);
+						double distsq = Math.pow(2*dx, 2) + Math.pow(2*dy, 2);
+						
+						// g = -Gmm/r^2
+						double f = -(Universe.CONSTANT_G * i.getMass() * a.getMass()) / distsq;
+						double fx = f * Math.cos(theta);
+						double fy = f * Math.sin(theta);
 							
-				// queue velocity changes by adding components of previous vel with vel from force vector over mass (a = f/m)
-				i.queueVel(i.getVelX() + (finalVec.getX()/i.getMass()), i.getVelY() + (finalVec.getY()/i.getMass()));
+						// Calculation to calculate force vector is here
+						vecs.add(new Vector(fx, fy));
+					}
+				}
+				for (Vector c : vecs) {
+					finalVec = Vector.addVec(finalVec, c);
+				}
 				
+				Vector secondVel = new Vector(eulerVel.getX() + (finalVec.getX()/i.getMass())*(OrbitSim.universeTick/1000.0), eulerVel.getY() + (finalVec.getY()/i.getMass())*(OrbitSim.universeTick/1000.0));
+				
+				// Take the average of the two velocities to get the velocity the body will actually have
+				Vector avgVel = new Vector((eulerVel.getX()+secondVel.getX())/2, (eulerVel.getY()+secondVel.getY())/2);
+				
+				i.queueVel(avgVel.getX(), avgVel.getY());
 				// queue the position changes based on the new velocity (v*t)
-				i.queuePos(i.getX() + (i.getVelX()*(OrbitSim.universeTick/1000.0)), i.getY() + (i.getVelY()*(OrbitSim.universeTick/1000.0)));
-				
+				i.queuePos(i.getX() + (avgVel.getX()*(OrbitSim.universeTick/1000.0)), i.getY() + (avgVel.getY()*(OrbitSim.universeTick/1000.0)));
 			}
 			
 			// tell all bodies to push the queued changes to their actual data
 			for (Body i: bodies) {
 				i.updateQueuedData();
 			}
+			
+			
+			//This section will handle collisions between bodies
+			//Check if circles intersect
+			//If they do, perform a momentum calculation, remove old bodies, and create new body with
+			//correct mass and velocity
 		}
-		
 		// Once required number of cycles have run, animation needs to be created
 		for (Body i : bodies) {
 			// Add keyframes based on old and new positions (old pos is updated when new pos is created)

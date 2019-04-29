@@ -27,8 +27,8 @@ public class Body {
 		posXOld = x;
 		posYOld = y;
 		posY = y;
-		if (mass > 3) {
-			circle = new Circle(posX, posY, mass, Color.WHITESMOKE);
+		if (Math.sqrt(2*mass) > 3) {
+			circle = new Circle(posX, posY, Math.sqrt(mass*2), Color.WHITESMOKE);
 		} else {
 			circle = new Circle(posX, posY, 3, Color.WHITESMOKE);
 		}
@@ -42,12 +42,10 @@ public class Body {
 		posY = y;
 		velX = vx;
 		velY = vy;
-		if (mass < 3) {
-			circle = new Circle(posX, posY, 3, Color.WHITESMOKE);
-		} else if (mass > 20) {
-			circle = new Circle(posX, posY, 20, Color.WHITESMOKE);
+		if (Math.sqrt(1.5*mass) > 3) {
+			circle = new Circle(posX, posY, Math.sqrt(mass*1.5), Color.WHITESMOKE);
 		} else {
-			circle = new Circle(posX, posY, mass, Color.WHITESMOKE);
+			circle = new Circle(posX, posY, 3, Color.WHITESMOKE);
 		}
 	}
 	

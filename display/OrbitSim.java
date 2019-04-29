@@ -18,8 +18,9 @@ import orbitsim.engine.Universe;
 // Eventually, display velocity vectors, maybe force vectors, and history path for objects
 
 public class OrbitSim extends Application {
-	public static int animScale = 14;
-	public static final int universeTick = 7;
+	// Must be divisible by 5 currently
+	public static int animScale = 30;
+	public static final int universeTick = animScale/5;
 	Group canvas = new Group();
 	Universe universe = new Universe(this);
 	TimelineManager timelineManager = new TimelineManager(universe);
