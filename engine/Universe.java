@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.util.Duration;
 import orbitsim.display.OrbitSim;
@@ -18,8 +19,8 @@ public class Universe {
 	
 	public Universe(OrbitSim sim) {
 		main = sim;
-		bodies.add(new Body(0.01, 700, 100, 20, 120));
-		bodies.add(new Body(200, 600, 100, 0, 0));
+		bodies.add(new Body(0.01, 700, 300, 20, 20));
+		bodies.add(new Body(200, 600, 300, 0, 0));
 		bodies.add(new Body(100, 100, 300, 10, 40));
 		
 		// Calculate how many integrations occur between each animation creation
@@ -38,6 +39,17 @@ public class Universe {
 	public void cycle() {
 		// cycle through calculations until an animation
 		for (int b = 1; b <= cyclesPerAnim; b++) {
+			
+			for (Body i : bodies) {
+				for (Body a : bodies) {
+					if (a != i) {
+						if (checkIntersect(a.getCircle(),i.getCircle())) {
+							handleCollision(a, i);
+						}
+					}
+				}
+			}
+			
 			for (Body i : bodies) {
 				
 				ArrayList<Vector> vecs = new ArrayList<Vector>();
@@ -109,13 +121,10 @@ public class Universe {
 			// tell all bodies to push the queued changes to their actual data
 			for (Body i: bodies) {
 				i.updateQueuedData();
+				
+				// Check if each body is intersecting with any other body
 			}
 			
-			
-			//This section will handle collisions between bodies
-			//Check if circles intersect
-			//If they do, perform a momentum calculation, remove old bodies, and create new body with
-			//correct mass and velocity
 		}
 		// Once required number of cycles have run, animation needs to be created
 		for (Body i : bodies) {
@@ -137,5 +146,32 @@ public class Universe {
 		}
 		// Play the timeline
 		timelineManager.getTimeline().play();
+	}
+	
+	// Checker if two circles are intersecting (checking if something has collided)
+	boolean checkIntersect(Circle a, Circle b) {
+		return (Math.sqrt(Math.pow(a.getCenterX()-b.getCenterX(), 2) + Math.pow(a.getCenterY()-b.getCenterY(), 2)) < a.getRadius() + b.getRadius());
+	}
+	
+	// Method to handle collisions, with conservation of momentum, combining bodies, etc
+	void handleCollision(Body a, Body b) {
+		double momentumAX = a.getMass() * a.getVelX();
+		double momentumAY = a.getMass() * a.getVelY();
+		double momentumBX = b.getMass() * b.getVelX();
+		double momentumBY = b.getMass() * b.getVelY();
+		
+		double combinedMass = a.getMass() + b.getMass();
+		
+		double cVelX = (momentumAX + momentumBX)/combinedMass;
+		double cVelY = (momentumAY + momentumBY)/combinedMass;
+		Body c = new Body(combinedMass, (int)(a.getX()+b.getX())/2, (int)(a.getY() +b.getY())/2, cVelX, cVelY);
+		bodies.add(c);
+		
+		queueRemoval(a);
+		queueRemoval(b);
+	}
+
+//TODO: set it to build a list of bodies to remove, so that it can be run once collisions are all checked
+	void queueRemoval(Body a) {
 	}
 }
