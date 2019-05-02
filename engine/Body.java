@@ -32,6 +32,7 @@ public class Body {
 		} else {
 			circle = new Circle(posX, posY, 3, Color.WHITESMOKE);
 		}
+		
 	}
 	
 	public Body(double m, int x, int y, double vx, double vy) {

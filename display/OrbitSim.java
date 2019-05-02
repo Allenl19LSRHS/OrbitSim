@@ -6,6 +6,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -51,10 +52,6 @@ public class OrbitSim extends Application {
 		
 		//bodyControlManager.recreateGrid(2);
 		
-		for (int i = 0; i < universe.getBodies().size(); i++) {
-			canvas.getChildren().add(universe.getBodies().get(i).getCircle());
-		}
-		
 		stage.setScene(new Scene(root, 1200, 800));
 		
 		timelineManager.handle(new ActionEvent());
@@ -68,5 +65,13 @@ public class OrbitSim extends Application {
 	
 	public Group getCanvas() {
 		return canvas;
+	}
+	
+	public void removeCircle(Circle a) {
+		canvas.getChildren().remove(a);
+	}
+	
+	public void addCircle(Circle a) {
+		canvas.getChildren().add(a);
 	}
 }

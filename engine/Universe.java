@@ -20,8 +20,11 @@ public class Universe {
 	public Universe(OrbitSim sim) {
 		main = sim;
 		bodies.add(new Body(0.01, 700, 300, 20, 20));
-		bodies.add(new Body(200, 600, 300, 0, 0));
+		bodies.add(new Body(200, 300, 300, 0, 0));
 		bodies.add(new Body(100, 100, 300, 10, 40));
+		for (Body i : bodies) {
+			sim.addCircle(i.getCircle());
+		}
 		
 		// Calculate how many integrations occur between each animation creation
 		cyclesPerAnim = OrbitSim.animScale/OrbitSim.universeTick;
@@ -39,16 +42,6 @@ public class Universe {
 	public void cycle() {
 		// cycle through calculations until an animation
 		for (int b = 1; b <= cyclesPerAnim; b++) {
-			
-			for (Body i : bodies) {
-				for (Body a : bodies) {
-					if (a != i) {
-						if (checkIntersect(a.getCircle(),i.getCircle())) {
-							handleCollision(a, i);
-						}
-					}
-				}
-			}
 			
 			for (Body i : bodies) {
 				
@@ -125,6 +118,17 @@ public class Universe {
 				// Check if each body is intersecting with any other body
 			}
 			
+			//ArrayList<ArrayList<Body>> checkedBodies = new ArrayList<ArrayList<Body>>();
+			for (int i = 0; i < bodies.size(); i++) {
+				for (int a = i; a < bodies.size(); a++) {
+					if (bodies.get(a) != bodies.get(i)) {
+						if (checkIntersect(bodies.get(a).getCircle(),bodies.get(i).getCircle())) {
+							handleCollision(bodies.get(a), bodies.get(i));
+						}
+					}
+				}
+			}
+			
 		}
 		// Once required number of cycles have run, animation needs to be created
 		for (Body i : bodies) {
@@ -164,14 +168,17 @@ public class Universe {
 		
 		double cVelX = (momentumAX + momentumBX)/combinedMass;
 		double cVelY = (momentumAY + momentumBY)/combinedMass;
-		Body c = new Body(combinedMass, (int)(a.getX()+b.getX())/2, (int)(a.getY() +b.getY())/2, cVelX, cVelY);
+		Body c = new Body(combinedMass, (int)((a.getX()*a.getMass()+b.getX()*b.getMass())/(combinedMass)), (int)((a.getY()*a.getMass() +b.getY()*b.getMass())/combinedMass), cVelX, cVelY);
 		bodies.add(c);
+		main.addCircle(c.getCircle());
 		
-		queueRemoval(a);
-		queueRemoval(b);
+		removeBody(b);
+		removeBody(a);
 	}
 
 //TODO: set it to build a list of bodies to remove, so that it can be run once collisions are all checked
-	void queueRemoval(Body a) {
+	void removeBody(Body a) {
+		bodies.remove(a);
+		main.removeCircle(a.getCircle());
 	}
 }
