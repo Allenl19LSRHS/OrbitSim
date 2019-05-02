@@ -114,17 +114,12 @@ public class Universe {
 			// tell all bodies to push the queued changes to their actual data
 			for (Body i: bodies) {
 				i.updateQueuedData();
-				
-				// Check if each body is intersecting with any other body
 			}
 			
-			//ArrayList<ArrayList<Body>> checkedBodies = new ArrayList<ArrayList<Body>>();
 			for (int i = 0; i < bodies.size(); i++) {
 				for (int a = i; a < bodies.size(); a++) {
-					if (bodies.get(a) != bodies.get(i)) {
-						if (checkIntersect(bodies.get(a).getCircle(),bodies.get(i).getCircle())) {
-							handleCollision(bodies.get(a), bodies.get(i));
-						}
+					if (bodies.get(a) != bodies.get(i) && checkIntersect(bodies.get(a).getCircle(),bodies.get(i).getCircle())) {
+						handleCollision(bodies.get(a), bodies.get(i));
 					}
 				}
 			}
@@ -132,8 +127,8 @@ public class Universe {
 		}
 		// Once required number of cycles have run, animation needs to be created
 		for (Body i : bodies) {
+			
 			// Add keyframes based on old and new positions (old pos is updated when new pos is created)
-
 			timelineManager.getTimeline().getKeyFrames().addAll(
 					new KeyFrame(Duration.ZERO, new KeyValue(i.getCircle().centerXProperty(), i.getOldX()), new KeyValue(i.getCircle().centerYProperty(), i.getOldY())),
 					new KeyFrame(Duration.millis(OrbitSim.animScale), timelineManager, new KeyValue(i.getCircle().centerXProperty(), i.getX()), new KeyValue(i.getCircle().centerYProperty(), i.getY()))
@@ -159,26 +154,27 @@ public class Universe {
 	
 	// Method to handle collisions, with conservation of momentum, combining bodies, etc
 	void handleCollision(Body a, Body b) {
-		double momentumAX = a.getMass() * a.getVelX();
-		double momentumAY = a.getMass() * a.getVelY();
-		double momentumBX = b.getMass() * b.getVelX();
-		double momentumBY = b.getMass() * b.getVelY();
-		
 		double combinedMass = a.getMass() + b.getMass();
 		
-		double cVelX = (momentumAX + momentumBX)/combinedMass;
-		double cVelY = (momentumAY + momentumBY)/combinedMass;
+		// Calculate new velocities with conservation of momentum
+		double cVelX = (a.getMass() * a.getVelX() + b.getMass() * b.getVelX())/combinedMass;
+		double cVelY = (a.getMass() * a.getVelY() + b.getMass() * b.getVelY())/combinedMass;
+		
+		// create new body with combined mass, at the center of mass of the two objects, with the new velocities
 		Body c = new Body(combinedMass, (int)((a.getX()*a.getMass()+b.getX()*b.getMass())/(combinedMass)), (int)((a.getY()*a.getMass() +b.getY()*b.getMass())/combinedMass), cVelX, cVelY);
 		bodies.add(c);
 		main.addCircle(c.getCircle());
 		
+		// remove the old bodies
 		removeBody(b);
 		removeBody(a);
 	}
 
-//TODO: set it to build a list of bodies to remove, so that it can be run once collisions are all checked
+	//Method to remove bodies from the sim
 	void removeBody(Body a) {
+		// first remove from Universe's body list
 		bodies.remove(a);
+		// then remove the circle from the canvas
 		main.removeCircle(a.getCircle());
 	}
 }

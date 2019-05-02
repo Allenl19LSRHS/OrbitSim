@@ -1,7 +1,6 @@
 package orbitsim.display;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -16,9 +15,11 @@ import orbitsim.engine.Universe;
 //Questions to answer:
 // Slider for timescale? Faster = less accurate, slower = more accurate
 // Add buttons and text fields to change stats around bodies
-// Eventually, display velocity vectors, maybe force vectors, and history path for objects
+// Eventually, display velocity vectors, maybe force vectors
 
 public class OrbitSim extends Application {
+	// Anim scale is number of ms between animations
+	// universeTick is number of ms per physics calculation
 	// Must be divisible by 5 currently
 	public static int animScale = 30;
 	public static final int universeTick = animScale/5;
@@ -26,7 +27,7 @@ public class OrbitSim extends Application {
 	Universe universe = new Universe(this);
 	TimelineManager timelineManager = new TimelineManager(universe);
 	
-
+	// Launcher for javaFX application so it can run from IDE
 	public static void main(String[] args) {
 		launch(args);
 	}
@@ -41,22 +42,21 @@ public class OrbitSim extends Application {
         stage.setWidth(bounds.getWidth());
         stage.setHeight(bounds.getHeight());
 		
+        // Root is base group for whole screen
 		Group root = new Group();
+		
 		// Add background black box
 		root.getChildren().add(new Rectangle(bounds.getWidth(), bounds.getHeight(), Color.BLACK));
 		
-		
+		// canvas is display area for actual simulation
 		root.getChildren().add(canvas);
 		
+		// BCM is panel for setting body stats and starting/stopping simulation
 		//BodyControlManager bodyControlManager = new BodyControlManager(root);
 		
 		//bodyControlManager.recreateGrid(2);
 		
 		stage.setScene(new Scene(root, 1200, 800));
-		
-		timelineManager.handle(new ActionEvent());
-		
-		timelineManager.getTimeline().play();
 		
 		universe.cycle();
 		
