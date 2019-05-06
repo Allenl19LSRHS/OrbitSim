@@ -1,8 +1,7 @@
 package orbitsim.engine;
 
 public class Vector {
-	double xComp;
-	double yComp;
+	private double xComp, yComp;
 	
 	public Vector(double x, double y) {
 		xComp = x;

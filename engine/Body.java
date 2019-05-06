@@ -4,36 +4,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 public class Body {
-	double mass;
-	double posX;
-	double posY;
-	double posYOld;
-	double posXOld;
-	double velX = 0;
-	double velY = 0;
-	double queuedVelX = 0;
-	double queuedVelY = 0;
-	double queuedX = 0;
-	double queuedY = 0;
-	Circle circle;
-	public boolean cycled = false;
-	
-	public int cycle = 0;
+	private double mass, posX, posY, posYOld, posXOld, velX = 0, velY = 0, queuedVelX = 0,
+			queuedVelY = 0, queuedX = 0, queuedY = 0;
+	private Circle circle;
 	
 	// Upon creation, sets the given values, and creates the circle for the given starting position
-	public Body(double m, int x, int y) {
-		mass = m;
-		posX = x;
-		posXOld = x;
-		posYOld = y;
-		posY = y;
-		if (Math.sqrt(2*mass) > 3) {
-			circle = new Circle(posX, posY, Math.sqrt(mass*2), Color.WHITESMOKE);
-		} else {
-			circle = new Circle(posX, posY, 3, Color.WHITESMOKE);
-		}
-		
-	}
 	
 	public Body(double m, int x, int y, double vx, double vy) {
 		mass = m;

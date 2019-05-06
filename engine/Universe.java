@@ -11,17 +11,17 @@ import orbitsim.display.OrbitSim;
 import orbitsim.display.TimelineManager;
 
 public class Universe {
-	ArrayList<Body> bodies = new ArrayList<Body>();
-	TimelineManager timelineManager;
-	OrbitSim main;
+	private ArrayList<Body> bodies = new ArrayList<Body>();
+	private TimelineManager timelineManager = new TimelineManager(this);
+	private OrbitSim main;
 	static final double CONSTANT_G = 5000;
-	int cyclesPerAnim;
+	private int cyclesPerAnim;
 	
 	public Universe(OrbitSim sim) {
 		main = sim;
-		bodies.add(new Body(0.01, 700, 300, 20, 20));
+		bodies.add(new Body(0.01, 400, 300, 20, 100));
 		bodies.add(new Body(200, 300, 300, 0, 0));
-		bodies.add(new Body(100, 100, 300, 10, 40));
+		bodies.add(new Body(1, 100, 300, 10, 40));
 		for (Body i : bodies) {
 			sim.addCircle(i.getCircle());
 		}
@@ -29,14 +29,6 @@ public class Universe {
 		// Calculate how many integrations occur between each animation creation
 		cyclesPerAnim = OrbitSim.animScale/OrbitSim.universeTick;
 		System.out.println(cyclesPerAnim + " Cycles per animation");
-	}
-
-	public ArrayList<Body> getBodies() {
-		return bodies;
-	}
-	
-	public void setTLMgr(TimelineManager tl) {
-		timelineManager = tl;
 	}
 	
 	public void cycle() {
@@ -148,12 +140,12 @@ public class Universe {
 	}
 	
 	// Checker if two circles are intersecting (checking if something has collided)
-	boolean checkIntersect(Circle a, Circle b) {
+	private boolean checkIntersect(Circle a, Circle b) {
 		return (Math.sqrt(Math.pow(a.getCenterX()-b.getCenterX(), 2) + Math.pow(a.getCenterY()-b.getCenterY(), 2)) < a.getRadius() + b.getRadius());
 	}
 	
 	// Method to handle collisions, with conservation of momentum, combining bodies, etc
-	void handleCollision(Body a, Body b) {
+	private void handleCollision(Body a, Body b) {
 		double combinedMass = a.getMass() + b.getMass();
 		
 		// Calculate new velocities with conservation of momentum
@@ -171,7 +163,7 @@ public class Universe {
 	}
 
 	//Method to remove bodies from the sim
-	void removeBody(Body a) {
+	private void removeBody(Body a) {
 		// first remove from Universe's body list
 		bodies.remove(a);
 		// then remove the circle from the canvas

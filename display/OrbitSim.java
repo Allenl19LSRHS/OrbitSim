@@ -23,9 +23,8 @@ public class OrbitSim extends Application {
 	// Must be divisible by 5 currently
 	public static int animScale = 30;
 	public static final int universeTick = animScale/5;
-	Group canvas = new Group();
-	Universe universe = new Universe(this);
-	TimelineManager timelineManager = new TimelineManager(universe);
+	private Group canvas = new Group();
+	private Universe universe = new Universe(this);
 	
 	// Launcher for javaFX application so it can run from IDE
 	public static void main(String[] args) {
