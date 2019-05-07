@@ -1,5 +1,7 @@
 package orbitsim.display;
 
+import java.util.ArrayList;
+
 import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
@@ -9,6 +11,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import orbitsim.engine.Body;
 import orbitsim.engine.Universe;
 
 
@@ -21,10 +24,11 @@ public class OrbitSim extends Application {
 	// Anim scale is number of ms between animations
 	// universeTick is number of ms per physics calculation
 	// Must be divisible by 5 currently
-	public static int animScale = 30;
-	public static final int universeTick = animScale/5;
+	public static double animScale = 30;
+	public static final double universeTick = animScale/60;
 	private Group canvas = new Group();
 	private Universe universe = new Universe(this);
+	private BodyControlManager bodyControlManager;
 	
 	// Launcher for javaFX application so it can run from IDE
 	public static void main(String[] args) {
@@ -51,9 +55,10 @@ public class OrbitSim extends Application {
 		root.getChildren().add(canvas);
 		
 		// BCM is panel for setting body stats and starting/stopping simulation
-		//BodyControlManager bodyControlManager = new BodyControlManager(root);
+		bodyControlManager = new BodyControlManager(root);
 		
-		//bodyControlManager.recreateGrid(2);
+		bodyControlManager.recreateGrid(3);
+		updateGUI(universe.getBodies());
 		
 		stage.setScene(new Scene(root, 1200, 800));
 		
@@ -72,5 +77,16 @@ public class OrbitSim extends Application {
 	
 	public void addCircle(Circle a) {
 		canvas.getChildren().add(a);
+	}
+	
+	public void updateGUI(ArrayList<Body> a) {
+		for (int i = 0; i < a.size(); i++) {
+			Body b = a.get(i);
+			bodyControlManager.setBodyMass(i, b.getMass());
+			bodyControlManager.setBodyX(i, b.getX());
+			bodyControlManager.setBodyY(i, b.getY());
+			bodyControlManager.setBodyVelX(i, b.getVelX());
+			bodyControlManager.setBodyVelY(i, b.getVelY());
+		}
 	}
 }

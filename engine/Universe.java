@@ -15,7 +15,7 @@ public class Universe {
 	private TimelineManager timelineManager = new TimelineManager(this);
 	private OrbitSim main;
 	static final double CONSTANT_G = 5000;
-	private int cyclesPerAnim;
+	private double cyclesPerAnim;
 	
 	public Universe(OrbitSim sim) {
 		main = sim;
@@ -168,5 +168,9 @@ public class Universe {
 		bodies.remove(a);
 		// then remove the circle from the canvas
 		main.removeCircle(a.getCircle());
+	}
+	
+	public ArrayList<Body> getBodies() {
+		return bodies;
 	}
 }
