@@ -7,6 +7,7 @@ public class Body {
 	private double mass, posX, posY, posYOld, posXOld, velX = 0, velY = 0, queuedVelX = 0,
 			queuedVelY = 0, queuedX = 0, queuedY = 0;
 	private Circle circle;
+	private Color color;
 	
 	// Upon creation, sets the given values, and creates the circle for the given starting position
 	
@@ -23,6 +24,31 @@ public class Body {
 		} else {
 			circle = new Circle(posX, posY, 3, Color.WHITESMOKE);
 		}
+	}
+	
+	void setColor(int i) {
+		switch(i) {
+		case 0:
+			color = Color.WHITESMOKE;
+			break;
+		case 1:
+			color = Color.BLUE;
+			break;
+		case 2:
+			color = Color.YELLOW;
+			break;
+		case 3:
+			color = Color.RED;
+			break;
+		case 4:
+			color = Color.ORANGE;
+			break;
+		case 5:
+			color = Color.GREEN;
+			break;
+		}
+		
+		circle.setFill(color);
 	}
 	
 	public double getMass() {
@@ -76,6 +102,10 @@ public class Body {
 	
 	public void setVelY(double v) {
 		velY = v;
+	}
+	
+	public Color getColor() {
+		return color;
 	}
 	
 	public void queuePos(double x, double y) {

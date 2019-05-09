@@ -3,7 +3,6 @@ package orbitsim.engine;
 import java.util.ArrayList;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.util.Duration;
@@ -19,12 +18,9 @@ public class Universe {
 	
 	public Universe(OrbitSim sim) {
 		main = sim;
-		bodies.add(new Body(0.01, 400, 300, 20, 100));
-		bodies.add(new Body(200, 300, 300, 0, 0));
-		bodies.add(new Body(1, 100, 300, 10, 40));
-		for (Body i : bodies) {
-			sim.addCircle(i.getCircle());
-		}
+		createBody(0.01, 400, 300, 20, 100);
+		createBody(200, 300, 300, 0, 0);
+		createBody(1, 100, 300, 10, 40);
 		
 		// Calculate how many integrations occur between each animation creation
 		cyclesPerAnim = OrbitSim.animScale/OrbitSim.universeTick;
@@ -131,7 +127,7 @@ public class Universe {
 			// (not really necessary with such small calculation distances it's not noticable)
 			
 			Line l = new Line(i.getOldX(), i.getOldY(), i.getX(), i.getY());
-			l.setStroke(Color.WHITESMOKE);
+			l.setStroke(i.getColor());
 			main.getCanvas().getChildren().add(l);
 			i.resetOldPos();
 		}
@@ -153,9 +149,7 @@ public class Universe {
 		double cVelY = (a.getMass() * a.getVelY() + b.getMass() * b.getVelY())/combinedMass;
 		
 		// create new body with combined mass, at the center of mass of the two objects, with the new velocities
-		Body c = new Body(combinedMass, (int)((a.getX()*a.getMass()+b.getX()*b.getMass())/(combinedMass)), (int)((a.getY()*a.getMass() +b.getY()*b.getMass())/combinedMass), cVelX, cVelY);
-		bodies.add(c);
-		main.addCircle(c.getCircle());
+		createBody(combinedMass, (int)((a.getX()*a.getMass()+b.getX()*b.getMass())/(combinedMass)), (int)((a.getY()*a.getMass() +b.getY()*b.getMass())/combinedMass), cVelX, cVelY);
 		
 		// remove the old bodies
 		removeBody(b);
@@ -172,5 +166,20 @@ public class Universe {
 	
 	public ArrayList<Body> getBodies() {
 		return bodies;
+	}
+	
+	void getBodyNum(Body b) {
+		for (Body i : bodies) {
+			if (i == b) {
+				i.setColor(bodies.indexOf(i));
+			}
+		}
+	}
+	
+	void createBody(double m, int x, int y, double vx, double vy) {
+		Body b = new Body(m, x, y, vx, vy);
+		bodies.add(b);
+		main.addCircle(b.getCircle());
+		getBodyNum(b);
 	}
 }

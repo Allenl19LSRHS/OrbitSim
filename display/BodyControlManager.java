@@ -7,10 +7,15 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 
+//TODO:
+//	pause, play, and reset buttons
+//	add/remove body button
+
+
 public class BodyControlManager {
 	private Group root;
 	private GridPane pane;
-	int bodies = 2;
+	int bodies;
 	
 	
 	public BodyControlManager(Group g) {
@@ -42,6 +47,21 @@ public class BodyControlManager {
 				b.setTextFill(Color.WHITE);
 			}
 			
+			if (i instanceof TextField) {
+				if (GridPane.getRowIndex(i) == 1) {
+					((TextField)i).setStyle("-fx-control-inner-background: white;");
+				} else if (GridPane.getRowIndex(i) == 2) {
+					((TextField)i).setStyle("-fx-control-inner-background: blue;");
+				} else if (GridPane.getRowIndex(i) == 3) {
+					((TextField)i).setStyle("-fx-control-inner-background: yellow;");
+				} else if (GridPane.getRowIndex(i) == 1) {
+					((TextField)i).setStyle("-fx-control-inner-background: red;");
+				} else if (GridPane.getRowIndex(i) == 2) {
+					((TextField)i).setStyle("-fx-control-inner-background: orange;");
+				} else if (GridPane.getRowIndex(i) == 3) {
+					((TextField)i).setStyle("-fx-control-inner-background: green;");
+				}
+			}
 		}
 		
 		root.getChildren().add(pane);
