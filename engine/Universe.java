@@ -164,10 +164,12 @@ public class Universe {
 		main.removeCircle(a.getCircle());
 	}
 	
+	// Method to return the list of bodies
 	public ArrayList<Body> getBodies() {
 		return bodies;
 	}
 	
+	// Method to send the body which index of the bodies array it is (for setting color)
 	void getBodyNum(Body b) {
 		for (Body i : bodies) {
 			if (i == b) {
@@ -176,6 +178,7 @@ public class Universe {
 		}
 	}
 	
+	// Everything required to make a body. Create, add to array, add circle to display, set its color.
 	void createBody(double m, int x, int y, double vx, double vy) {
 		Body b = new Body(m, x, y, vx, vy);
 		bodies.add(b);

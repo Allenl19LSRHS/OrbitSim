@@ -25,15 +25,17 @@ public class BodyControlManager {
 	public void recreateGrid(int a) {
 		bodies = a;
 		pane = new GridPane();
+		
+		// create top row labels
 		pane.add(new Label("Mass:"), 1, 0);
 		pane.add(new Label("X Pos:"), 2, 0);
 		pane.add(new Label("Y Pos:"), 3, 0);
 		pane.add(new Label("X Vel:"), 4, 0);
 		pane.add(new Label("Y Vel:"), 5, 0);
 
-		
+		// for as many bodies as there are, create new rows each
 		for (int i = 0; i < bodies; i++) {
-			pane.add(new Label("Body 1:"), 0, i+1);
+			pane.add(new Label("Body " + i + ":"), 0, i+1);
 			pane.add(new TextField(), 1, i+1);
 			pane.add(new TextField(), 2, i+1);
 			pane.add(new TextField(), 3, i+1);
@@ -42,11 +44,13 @@ public class BodyControlManager {
 		}
 		
 		for (Node i : pane.getChildren()) {
+			// set the labels to white text
 			if (i instanceof Label) {
 				Label b = (Label) i;
 				b.setTextFill(Color.WHITE);
 			}
 			
+			// set the text fields to the corresponding body color based on row
 			if (i instanceof TextField) {
 				if (GridPane.getRowIndex(i) == 1) {
 					((TextField)i).setStyle("-fx-control-inner-background: white;");
@@ -64,9 +68,11 @@ public class BodyControlManager {
 			}
 		}
 		
+		// add all boxes etc to array
 		root.getChildren().add(pane);
 	}
 	
+	// get a specific box is based on its row and column
 	Node getNodeByGrid(int row, int column) {
 		for (Node i : pane.getChildren()) {
 			if (GridPane.getRowIndex(i) == row && GridPane.getColumnIndex(i) == column) {
@@ -77,6 +83,8 @@ public class BodyControlManager {
 		return null;
 	}
 	
+	
+	// Bunch of getters and setters for the body stats boxes int is the body number, and on setters second num is value to set
 	public double getBodyMass(int n) {
 		TextField t = (TextField) getNodeByGrid(n + 1, 1);
 		return Integer.getInteger(t.getText());

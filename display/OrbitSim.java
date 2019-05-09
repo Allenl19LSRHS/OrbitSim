@@ -79,6 +79,7 @@ public class OrbitSim extends Application {
 		canvas.getChildren().add(a);
 	}
 	
+	// Updates the body controls to populate with initial values of the bodies
 	public void updateGUI(ArrayList<Body> a) {
 		for (int i = 0; i < a.size(); i++) {
 			Body b = a.get(i);

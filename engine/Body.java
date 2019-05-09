@@ -26,6 +26,7 @@ public class Body {
 		}
 	}
 	
+	// set the color based on the number passed by Universe
 	void setColor(int i) {
 		switch(i) {
 		case 0:
@@ -51,6 +52,8 @@ public class Body {
 		circle.setFill(color);
 	}
 	
+	
+	// just a ton of getters and setters
 	public double getMass() {
 		return mass;
 	}
