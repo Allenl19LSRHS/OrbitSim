@@ -10,6 +10,7 @@ import javafx.scene.paint.Color;
 //TODO:
 //	pause, play, and reset buttons
 //	add/remove body button
+//	lock body stats while sim is running
 
 
 public class BodyControlManager {

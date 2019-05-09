@@ -1,5 +1,7 @@
 package orbitsim.engine;
 
+
+// Simple class to represent an x and y vector, with static methods for operations
 public class Vector {
 	private double xComp, yComp;
 	
