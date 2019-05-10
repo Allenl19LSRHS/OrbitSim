@@ -1,7 +1,12 @@
 package orbitsim.display;
 
+import java.util.ArrayList;
+
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
@@ -16,11 +21,15 @@ import javafx.scene.paint.Color;
 public class BodyControlManager {
 	private Group root;
 	private GridPane pane;
+	private OrbitSim main;
+	ArrayList<Button> controls = new ArrayList<Button>();
+	GridPane controlsPane = new GridPane();
 	int bodies;
 	
 	
-	public BodyControlManager(Group g) {
+	public BodyControlManager(Group g, OrbitSim a) {
 		root = g;
+		main = a;
 	}
 	
 	public void recreateGrid(int a) {
@@ -67,10 +76,57 @@ public class BodyControlManager {
 					((TextField)i).setStyle("-fx-control-inner-background: green;");
 				}
 			}
+			
+			
+			
+			controlsPane.setLayoutX(root.getScene().getWidth() - 125);
+			controlsPane.setLayoutY(0);
+			
+			
+			// idk why it does it but when just creating them in the controls.add command,
+			// adding them to the controlsPane gives an InvocationTargetException
+			// So instead I have to do it the dumb way
+			Button button1 = new Button("Start/Resume");
+			Button button2 = new Button("Pause");
+			Button button3 = new Button("Stop");
+			
+			controls.add(button1);
+			controls.add(button2);
+			controls.add(button3);
+			
+			controlsPane.add(button1, 0, 0);
+			controlsPane.add(button2, 0, 1);
+			controlsPane.add(button3, 0, 2);
+			
+			// Set the button width so they are all the same size
+			for (Button c: controls) {
+				if (c instanceof Button) {
+					c.setPrefWidth(125);
+					c.setMinWidth(Button.USE_PREF_SIZE);
+				}
+			}
+			
+			// Event handlers for the 3 buttons
+			button1.setOnAction(new EventHandler<ActionEvent>() {
+				@Override public void handle(ActionEvent e) {
+					main.resume();
+				}
+			});
+			button2.setOnAction(new EventHandler<ActionEvent>() {
+				@Override public void handle(ActionEvent e) {
+					main.pause();
+				}
+			});
+			button3.setOnAction(new EventHandler<ActionEvent>() {
+				@Override public void handle(ActionEvent e) {
+					main.reset();
+				}
+			});
 		}
 		
 		// add all boxes etc to array
 		root.getChildren().add(pane);
+		root.getChildren().add(controlsPane);
 	}
 	
 	// get a specific box is based on its row and column

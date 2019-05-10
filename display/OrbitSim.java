@@ -55,12 +55,14 @@ public class OrbitSim extends Application {
 		root.getChildren().add(canvas);
 		
 		// BCM is panel for setting body stats and starting/stopping simulation
-		bodyControlManager = new BodyControlManager(root);
+		bodyControlManager = new BodyControlManager(root, this);
+		
+
+		stage.setScene(new Scene(root, bounds.getWidth(), bounds.getHeight()));
 		
 		bodyControlManager.recreateGrid(3);
 		updateGUI(universe.getBodies());
 		
-		stage.setScene(new Scene(root, 1200, 800));
 		
 		universe.cycle();
 		
@@ -89,5 +91,18 @@ public class OrbitSim extends Application {
 			bodyControlManager.setBodyVelX(i, b.getVelX());
 			bodyControlManager.setBodyVelY(i, b.getVelY());
 		}
+	}
+	
+	// Methods need to talk to Universe and control things
+	public void resume() {
+		// Resume just continues/starts the simulation
+	}
+	
+	public void pause() {
+		// Pause just keeps the next calculation and timeline from being created
+	}
+	
+	public void reset() {
+		// Read the values from the text boxes, destroy all current bodies, and create new ones
 	}
 }
