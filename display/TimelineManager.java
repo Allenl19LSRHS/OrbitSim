@@ -6,11 +6,11 @@ import javafx.event.EventHandler;
 import orbitsim.engine.Universe;
 
 public class TimelineManager implements EventHandler<ActionEvent> {
-	private Universe main;
+	private Universe universe;
 	private Timeline timeline = new Timeline();
 	
 	public TimelineManager(Universe uvs) {
-		main = uvs;
+		universe = uvs;
 	}
 	
 	public Timeline getTimeline() {
@@ -20,6 +20,7 @@ public class TimelineManager implements EventHandler<ActionEvent> {
 	public void handle(ActionEvent event) {
 		timeline.stop();
 		timeline.getKeyFrames().clear();
-		main.cycle();
+		if (OrbitSim.run)
+			universe.cycle();
 	}
 }

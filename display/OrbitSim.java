@@ -17,7 +17,6 @@ import orbitsim.engine.Universe;
 
 //Questions to answer:
 // Slider for timescale? Faster = less accurate, slower = more accurate
-// Add buttons and text fields to change stats around bodies
 // Eventually, display velocity vectors, maybe force vectors
 
 public class OrbitSim extends Application {
@@ -26,6 +25,7 @@ public class OrbitSim extends Application {
 	// Must be divisible by 5 currently
 	public static double animScale = 30;
 	public static final double universeTick = animScale/60;
+	public static boolean run = true;
 	private Group canvas = new Group();
 	private Universe universe = new Universe(this);
 	private BodyControlManager bodyControlManager;
@@ -95,14 +95,24 @@ public class OrbitSim extends Application {
 	
 	// Methods need to talk to Universe and control things
 	public void resume() {
+		run = true;
+		universe.cycle();
 		// Resume just continues/starts the simulation
 	}
 	
 	public void pause() {
+		run = false;
 		// Pause just keeps the next calculation and timeline from being created
 	}
 	
 	public void reset() {
 		// Read the values from the text boxes, destroy all current bodies, and create new ones
+		run = false;
+		universe.clearAll();
+		canvas.getChildren().clear();
+		BodyControlManager bcm = bodyControlManager;
+		for (int i = 0; i < bcm.getBodyCount(); i++) {
+			universe.createBody(bcm.getBodyMass(i), bcm.getBodyX(i), bcm.getBodyY(i), bcm.getBodyVelX(i), bcm.getBodyVelY(i));
+		}
 	}
 }

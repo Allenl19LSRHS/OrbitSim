@@ -13,7 +13,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 
 //TODO:
-//	pause, play, and reset buttons
 //	add/remove body button
 //	lock body stats while sim is running
 
@@ -88,7 +87,7 @@ public class BodyControlManager {
 			// So instead I have to do it the dumb way
 			Button button1 = new Button("Start/Resume");
 			Button button2 = new Button("Pause");
-			Button button3 = new Button("Stop");
+			Button button3 = new Button("Reset/Update Values");
 			
 			controls.add(button1);
 			controls.add(button2);
@@ -140,31 +139,34 @@ public class BodyControlManager {
 		return null;
 	}
 	
+	public int getBodyCount() {
+		return bodies;
+	}
 	
 	// Bunch of getters and setters for the body stats boxes int is the body number, and on setters second num is value to set
 	public double getBodyMass(int n) {
 		TextField t = (TextField) getNodeByGrid(n + 1, 1);
-		return Integer.getInteger(t.getText());
+		return Double.parseDouble(t.getText());
 	}
 	
 	public double getBodyX(int n) {
 		TextField t = (TextField) getNodeByGrid(n + 1, 2);
-		return Integer.getInteger(t.getText());
+		return Double.parseDouble(t.getText());
 	}
 	
 	public double getBodyY(int n) {
 		TextField t = (TextField) getNodeByGrid(n + 1, 3);
-		return Integer.getInteger(t.getText());
+		return Double.parseDouble(t.getText());
 	}
 	
 	public double getBodyVelX(int n) {
 		TextField t = (TextField) getNodeByGrid(n + 1, 4);
-		return Integer.getInteger(t.getText());
+		return Double.parseDouble(t.getText());
 	}
 	
 	public double getBodyVelY(int n) {
 		TextField t = (TextField) getNodeByGrid(n + 1, 5);
-		return Integer.getInteger(t.getText());
+		return Double.parseDouble(t.getText());
 	}
 	
 	public void setBodyMass(int n, double m) {

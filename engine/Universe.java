@@ -179,10 +179,17 @@ public class Universe {
 	}
 	
 	// Everything required to make a body. Create, add to array, add circle to display, set its color.
-	void createBody(double m, int x, int y, double vx, double vy) {
+	public void createBody(double m, double x, double y, double vx, double vy) {
 		Body b = new Body(m, x, y, vx, vy);
 		bodies.add(b);
 		main.addCircle(b.getCircle());
 		getBodyNum(b);
+	}
+	
+	public void clearAll() {
+		for (int i = 0; i < bodies.size(); i++) {
+			removeBody(bodies.get(i));
+		}
+		bodies.clear();
 	}
 }

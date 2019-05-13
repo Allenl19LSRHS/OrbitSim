@@ -11,7 +11,7 @@ public class Body {
 	
 	// Upon creation, sets the given values, and creates the circle for the given starting position
 	
-	public Body(double m, int x, int y, double vx, double vy) {
+	public Body(double m, double x, double y, double vx, double vy) {
 		mass = m;
 		posX = x;
 		posXOld = x;
