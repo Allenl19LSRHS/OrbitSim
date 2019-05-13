@@ -16,6 +16,7 @@ import orbitsim.engine.Universe;
 
 
 //Questions to answer:
+// Work on overlap of bodies and lines etc (bodies need to be on top)
 // Slider for timescale? Faster = less accurate, slower = more accurate
 // Eventually, display velocity vectors, maybe force vectors
 
