@@ -54,6 +54,7 @@ public class BodyControlManager {
 			pane.add(new TextField(), 5, i+1);
 		}
 		
+		// Add/remove body buttons
 		Button buttonA = new Button("Add body");
 		Button buttonB = new Button("Remove body");
 		

@@ -117,20 +117,34 @@ public class OrbitSim extends Application {
 		}
 	}
 	
+	// Adds another body to the simulation
 	public void increaseBodies() {
+		//maximum of 6 bodies
 		if(!(bodyControlManager.getBodyCount() > 5)) {
+			// first reset the sim so when the boxes are redrawn and repopulated
+			// the values are the initial values not huge decimals
 			reset();
+			// Create the new body
 			universe.createBody(0.1, 300, 300, 0, 0);
+			// Remake the grid with another body
 			bodyControlManager.recreateGrid(bodyControlManager.getBodyCount()+1);
+			// Repopulate the grid
 			updateGUI(universe.getBodies());
 		}
 	}
 	
+	//Remove a body from the sim
 	public void decreaseBodies() {
+		// Minimum of 2 bodies
 		if (bodyControlManager.getBodyCount() > 2) {
+			// first reset the sim so when the boxes are redrawn and repopulated
+			// the values are the initial values not huge decimals
 			reset();
+			// Remove the last body in the list
 			universe.removeBody(universe.getBodies().get(universe.getBodies().size()-1));
+			// Recreate the grid with fewer bodies
 			bodyControlManager.recreateGrid(bodyControlManager.getBodyCount()-1);
+			// Repopulate the grid
 			updateGUI(universe.getBodies());
 		}
 	}

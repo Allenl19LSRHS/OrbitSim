@@ -17,6 +17,7 @@ public class TimelineManager implements EventHandler<ActionEvent> {
 		return timeline;
 	}
 	
+	// Reset the timeline when the animations are complete and rerun
 	public void handle(ActionEvent event) {
 		timeline.stop();
 		timeline.getKeyFrames().clear();

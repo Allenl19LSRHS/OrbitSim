@@ -186,6 +186,7 @@ public class Universe {
 		getBodyNum(b);
 	}
 	
+	// Clear the whole screen and the array
 	public void clearAll() {
 		for (int i = 0; i < bodies.size(); i++) {
 			removeBody(bodies.get(i));
