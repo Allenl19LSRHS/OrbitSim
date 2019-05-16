@@ -157,7 +157,7 @@ public class Universe {
 	}
 
 	//Method to remove bodies from the sim
-	private void removeBody(Body a) {
+	public void removeBody(Body a) {
 		// first remove from Universe's body list
 		bodies.remove(a);
 		// then remove the circle from the canvas

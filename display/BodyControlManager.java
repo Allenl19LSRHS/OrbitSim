@@ -13,7 +13,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 
 //TODO:
-//	add/remove body button
 //	lock body stats while sim is running
 
 
@@ -32,8 +31,11 @@ public class BodyControlManager {
 	}
 	
 	public void recreateGrid(int a) {
+		root.getChildren().remove(pane);
+		root.getChildren().remove(controlsPane);
 		bodies = a;
 		pane = new GridPane();
+		controlsPane = new GridPane();
 		
 		// create top row labels
 		pane.add(new Label("Mass:"), 1, 0);
@@ -44,13 +46,31 @@ public class BodyControlManager {
 
 		// for as many bodies as there are, create new rows each
 		for (int i = 0; i < bodies; i++) {
-			pane.add(new Label("Body " + i + ":"), 0, i+1);
+			pane.add(new Label("Body " + (i+1) + ":"), 0, i+1);
 			pane.add(new TextField(), 1, i+1);
 			pane.add(new TextField(), 2, i+1);
 			pane.add(new TextField(), 3, i+1);
 			pane.add(new TextField(), 4, i+1);
 			pane.add(new TextField(), 5, i+1);
 		}
+		
+		Button buttonA = new Button("Add body");
+		Button buttonB = new Button("Remove body");
+		
+		pane.add(buttonA, 6, 1);
+		pane.add(buttonB, 6, 2);
+		
+		buttonA.setOnAction(new EventHandler<ActionEvent>() {
+			@Override public void handle(ActionEvent e) {
+				main.increaseBodies();
+			}
+		});
+		
+		buttonB.setOnAction(new EventHandler<ActionEvent>() {
+			@Override public void handle(ActionEvent e) {
+				main.decreaseBodies();
+			}
+		});
 		
 		for (Node i : pane.getChildren()) {
 			// set the labels to white text
@@ -67,11 +87,11 @@ public class BodyControlManager {
 					((TextField)i).setStyle("-fx-control-inner-background: blue;");
 				} else if (GridPane.getRowIndex(i) == 3) {
 					((TextField)i).setStyle("-fx-control-inner-background: yellow;");
-				} else if (GridPane.getRowIndex(i) == 1) {
+				} else if (GridPane.getRowIndex(i) == 4) {
 					((TextField)i).setStyle("-fx-control-inner-background: red;");
-				} else if (GridPane.getRowIndex(i) == 2) {
+				} else if (GridPane.getRowIndex(i) == 5) {
 					((TextField)i).setStyle("-fx-control-inner-background: orange;");
-				} else if (GridPane.getRowIndex(i) == 3) {
+				} else if (GridPane.getRowIndex(i) == 6) {
 					((TextField)i).setStyle("-fx-control-inner-background: green;");
 				}
 			}

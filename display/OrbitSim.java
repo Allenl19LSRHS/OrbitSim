@@ -116,4 +116,22 @@ public class OrbitSim extends Application {
 			universe.createBody(bcm.getBodyMass(i), bcm.getBodyX(i), bcm.getBodyY(i), bcm.getBodyVelX(i), bcm.getBodyVelY(i));
 		}
 	}
+	
+	public void increaseBodies() {
+		if(!(bodyControlManager.getBodyCount() > 5)) {
+			reset();
+			universe.createBody(0.1, 300, 300, 0, 0);
+			bodyControlManager.recreateGrid(bodyControlManager.getBodyCount()+1);
+			updateGUI(universe.getBodies());
+		}
+	}
+	
+	public void decreaseBodies() {
+		if (bodyControlManager.getBodyCount() > 2) {
+			reset();
+			universe.removeBody(universe.getBodies().get(universe.getBodies().size()-1));
+			bodyControlManager.recreateGrid(bodyControlManager.getBodyCount()-1);
+			updateGUI(universe.getBodies());
+		}
+	}
 }
