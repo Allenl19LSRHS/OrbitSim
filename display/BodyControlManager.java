@@ -1,4 +1,4 @@
-package orbitsim.display;
+package display;
 
 import java.util.ArrayList;
 

@@ -1,13 +1,14 @@
-package orbitsim.engine;
+package engine;
 
 import java.util.ArrayList;
+
+import display.OrbitSim;
+import display.TimelineManager;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.util.Duration;
-import orbitsim.display.OrbitSim;
-import orbitsim.display.TimelineManager;
 
 public class Universe {
 	private ArrayList<Body> bodies = new ArrayList<Body>();

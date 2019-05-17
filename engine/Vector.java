@@ -1,4 +1,4 @@
-package orbitsim.engine;
+package engine;
 
 
 // Simple class to represent an x and y vector, with static methods for operations

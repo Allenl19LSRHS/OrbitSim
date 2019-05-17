@@ -1,7 +1,9 @@
-package orbitsim.display;
+package display;
 
 import java.util.ArrayList;
 
+import engine.Body;
+import engine.Universe;
 import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
@@ -11,8 +13,6 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import orbitsim.engine.Body;
-import orbitsim.engine.Universe;
 
 
 //Questions to answer:

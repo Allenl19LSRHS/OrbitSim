@@ -1,9 +1,9 @@
-package orbitsim.display;
+package display;
 
+import engine.Universe;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import orbitsim.engine.Universe;
 
 public class TimelineManager implements EventHandler<ActionEvent> {
 	private Universe universe;
