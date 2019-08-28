@@ -21,9 +21,9 @@ public class Universe {
 	public Universe(OrbitSim sim) {
 		main = sim;
 		stageSize = main.getStageSize();
-		createBody(0.01, 0, 0, 20, 100);
-		createBody(200, 100, 100, 0, 0);
-		createBody(25, 200, 200, 10, 40);
+		createBody(0.01, 100, 50, 20, -70);
+		createBody(200, 0, 0, 0, 0);
+		createBody(1, -100, 200, 50, 5);
 		
 		// Calculate how many integrations occur between each animation creation
 		cyclesPerAnim = OrbitSim.animScale/OrbitSim.universeTick;
