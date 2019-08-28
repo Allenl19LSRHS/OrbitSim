@@ -1,4 +1,4 @@
-package orbitsim.engine;
+package engine;
 
 import java.util.ArrayList;
 import javafx.animation.KeyFrame;
@@ -6,8 +6,8 @@ import javafx.animation.KeyValue;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.util.Duration;
-import orbitsim.display.OrbitSim;
-import orbitsim.display.TimelineManager;
+import display.OrbitSim;
+import display.TimelineManager;
 
 public class Universe {
 	private ArrayList<Body> bodies = new ArrayList<Body>();
@@ -15,16 +15,17 @@ public class Universe {
 	private OrbitSim main;
 	static final double CONSTANT_G = 5000;
 	private double cyclesPerAnim;
+	private double[] stageSize;
 	
 	public Universe(OrbitSim sim) {
 		main = sim;
-		createBody(0.01, 600, 300, 20, 100);
-		createBody(200, 500, 400, 0, 0);
-		createBody(25, 200, 500, 10, 40);
+		stageSize = main.getStageSize();
+		createBody(0.01, 0, 0, 20, 100);
+		createBody(200, 100, 100, 0, 0);
+		createBody(25, 200, 200, 10, 40);
 		
 		// Calculate how many integrations occur between each animation creation
 		cyclesPerAnim = OrbitSim.animScale/OrbitSim.universeTick;
-		System.out.println(cyclesPerAnim + " Cycles per animation");
 	}
 	
 	public void cycle() {
@@ -128,6 +129,8 @@ public class Universe {
 			
 			Line l = new Line(i.getOldX(), i.getOldY(), i.getX(), i.getY());
 			l.setStroke(i.getColor());
+			l.setTranslateX(stageSize[0]/2);
+			l.setTranslateY(stageSize[1]/2);
 			main.getCanvas().getChildren().add(l);
 			i.resetOldPos();
 		}
@@ -181,6 +184,7 @@ public class Universe {
 	// Everything required to make a body. Create, add to array, add circle to display, set its color.
 	public void createBody(double m, double x, double y, double vx, double vy) {
 		Body b = new Body(m, x, y, vx, vy);
+		b.addTranslation((int)(stageSize[0]/2), (int)(stageSize[1]/2));
 		bodies.add(b);
 		main.addCircle(b.getCircle());
 		getBodyNum(b);

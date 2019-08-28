@@ -1,4 +1,4 @@
-package orbitsim.engine;
+package engine;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -47,9 +47,19 @@ public class Body {
 		case 5:
 			color = Color.GREEN;
 			break;
+		case 6:
+			color = Color.BROWN;
+			break;
+		case 7:
+			color = Color.PINK;
 		}
 		
 		circle.setFill(color);
+	}
+	
+	public void addTranslation(int translateX, int translateY) {
+		circle.setTranslateX(translateX);
+		circle.setTranslateY(translateY);
 	}
 	
 	

@@ -1,4 +1,4 @@
-package orbitsim.display;
+package display;
 
 import java.util.ArrayList;
 
@@ -11,8 +11,8 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import orbitsim.engine.Body;
-import orbitsim.engine.Universe;
+import engine.Body;
+import engine.Universe;
 
 
 //Questions to answer:
@@ -27,9 +27,12 @@ public class OrbitSim extends Application {
 	public static double animScale = 30;
 	public static final double universeTick = animScale/60;
 	public static boolean run = true;
+	private double stageWidth;
+	private double stageHeight;
 	private Group canvas = new Group();
-	private Universe universe = new Universe(this);
+	private Universe universe;
 	private BodyControlManager bodyControlManager;
+	
 	
 	// Launcher for javaFX application so it can run from IDE
 	public static void main(String[] args) {
@@ -43,9 +46,12 @@ public class OrbitSim extends Application {
 
         stage.setX(bounds.getMinX());
         stage.setY(bounds.getMinY());
-        stage.setWidth(bounds.getWidth());
-        stage.setHeight(bounds.getHeight());
+        stageWidth = bounds.getWidth();
+        stage.setWidth(stageWidth);
+        stageHeight = bounds.getHeight();
+        stage.setHeight(stageHeight);
 		
+        universe = new Universe(this);
         // Root is base group for whole screen
 		Group root = new Group();
 		
@@ -147,5 +153,10 @@ public class OrbitSim extends Application {
 			// Repopulate the grid
 			updateGUI(universe.getBodies());
 		}
+	}
+	
+	public double[] getStageSize() {
+		double stageSize[] = {stageWidth, stageHeight};
+		return stageSize;
 	}
 }
