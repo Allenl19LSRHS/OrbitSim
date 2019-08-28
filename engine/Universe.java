@@ -9,11 +9,6 @@ import javafx.animation.KeyValue;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.util.Duration;
-<<<<<<< HEAD
-import display.OrbitSim;
-import display.TimelineManager;
-=======
->>>>>>> 6d61adc74aa71a6cc77bcb3ec3dbd1afc67acfbd
 
 public class Universe {
 	private ArrayList<Body> bodies = new ArrayList<Body>();
